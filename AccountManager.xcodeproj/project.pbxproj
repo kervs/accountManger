@@ -113,8 +113,8 @@
 			isa = PBXGroup;
 			children = (
 				3BE32E421E00360A001882CB /* AccountManager */,
-				3BE32E571E00360B001882CB /* AccountManageTests */,
-				3BE32E621E00360B001882CB /* AccountManageUITests */,
+				3BE32E571E00360B001882CB /* AccountManagerTests */,
+				3BE32E621E00360B001882CB /* AccountManagerUITests */,
 				3BE32E411E00360A001882CB /* Products */,
 				AB862B27DA1E9D6904B5E81C /* Pods */,
 				391B058CC77E3979356353E0 /* Frameworks */,
@@ -150,21 +150,23 @@
 			path = AccountManage;
 			sourceTree = "<group>";
 		};
-		3BE32E571E00360B001882CB /* AccountManageTests */ = {
+		3BE32E571E00360B001882CB /* AccountManagerTests */ = {
 			isa = PBXGroup;
 			children = (
 				3BE32E581E00360B001882CB /* AccountManageTests.swift */,
 				3BE32E5A1E00360B001882CB /* Info.plist */,
 			);
+			name = AccountManagerTests;
 			path = AccountManageTests;
 			sourceTree = "<group>";
 		};
-		3BE32E621E00360B001882CB /* AccountManageUITests */ = {
+		3BE32E621E00360B001882CB /* AccountManagerUITests */ = {
 			isa = PBXGroup;
 			children = (
 				3BE32E631E00360B001882CB /* AccountManageUITests.swift */,
 				3BE32E651E00360B001882CB /* Info.plist */,
 			);
+			name = AccountManagerUITests;
 			path = AccountManageUITests;
 			sourceTree = "<group>";
 		};

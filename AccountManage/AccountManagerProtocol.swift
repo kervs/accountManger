@@ -17,7 +17,7 @@ protocol AccountManagerProtocol {
     var currentUser: User? { get }
 
     init (firebase: FIRDatabaseReference)
-    func login(_ userData: UserAuthData?, completion: (results: ResultType) -> Void)
+    func login(_ userData: UserAuthData?, completion: (_ results: ResultType) -> Void)
     func logout()
 }
 
@@ -29,9 +29,9 @@ enum AccountManagerType {
 }
 
 let AccountManagerTypes: [AccountManagerType: AccountManager.Type] = [
-    .email: EmailAccountManager.self,
-    .facebook: FacebookAccountManager.self,
-    .twitter: TwitterAccountManager.self,
+//    .email: EmailAccountManager.self,
+//    .facebook: FacebookAccountManager.self,
+//    .twitter: TwitterAccountManager.self,
     .anonymous: AnonymousAccountManager.self
 ]
 

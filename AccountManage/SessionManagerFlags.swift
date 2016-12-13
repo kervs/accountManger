@@ -144,20 +144,6 @@ class SessionManagerFlags {
         }
     }
 
-    var isKeyboardInstalled: Bool {
-        get {
-            guard let keyboards = UserDefaults.standard.dictionaryRepresentation()["AppleKeyboards"] as? [String] else {
-                return false
-            }
-            
-            if !keyboards.contains(KeyboardIdentifier) {
-                return false
-            } else {
-                return true
-            }
-        }
-    }
-    
     var openSession: Bool {
         get {
             return userDefaults.bool(forKey: SessionManagerPropertyKey.openSession)

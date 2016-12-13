@@ -2,11 +2,10 @@
 //  User.swift
 //  Often
 //
-//  Created by Luc Success on 5/13/15.
+//  Created by Kervins Valcourt on 5/13/15.
 //  Copyright (c) 2015 Project Surf. All rights reserved.
 //
-
-import Crashlytics
+import UIKit
 
 class User: NSObject {
     var id: String = ""
@@ -104,7 +103,6 @@ class User: NSObject {
             self.firebasePushNotificationToken = firebasePushNotificationToken
         }
 
-        setupCrashlytics()
     }
     
     func dataChangedToDictionary() -> [String: AnyObject] {
@@ -116,11 +114,7 @@ class User: NSObject {
             "username": username as AnyObject,
             "profileImageSmall": profileImageSmall as AnyObject,
             "profileImageLarge": profileImageLarge as AnyObject,
-            "image": [
-                "small_url": profileImageSmall,
-                "large_url": profileImageLarge
-            ],
-            "backgroundImage": backgroundImage
+            "backgroundImage": backgroundImage as AnyObject
         ]
 
         if !email.isEmpty {
@@ -138,11 +132,6 @@ class User: NSObject {
         return userData
     }
 
-    fileprivate func setupCrashlytics() {
-        Crashlytics.sharedInstance().setUserEmail(email)
-        Crashlytics.sharedInstance().setUserIdentifier(id)
-        Crashlytics.sharedInstance().setUserName(name)
-    }
 }
 
 struct UserAuthData {

@@ -7,14 +7,12 @@
 //
 
 import Foundation
-import Crashlytics
-import TwitterKit
 import Alamofire
 import Firebase
 
-typealias AccountManagerResultCallback = (results: ResultType) -> Void
+typealias AccountManagerResultCallback = (_ results: ResultType) -> Void
 
-class AccountManager: AccountManagerProtocol, ConnectivityObservable {
+class AccountManager: AccountManagerProtocol {
     weak var delegate: AccountManagerDelegate?
     var currentUser: User?
 
@@ -25,7 +23,6 @@ class AccountManager: AccountManagerProtocol, ConnectivityObservable {
 
     required init (firebase: FIRDatabaseReference) {
         self.firebase = firebase
-        startMonitoring()
     }
 
     func isUserLoggedIn() {
@@ -35,10 +32,10 @@ class AccountManager: AccountManagerProtocol, ConnectivityObservable {
         }
 
         userRef = firebase.child("users/\(userID)")
-        userRef?.observeEventType(.Value, withBlock: { snapshot in
-            if let value = snapshot.value as? [String: AnyObject] where snapshot.exists() {
+        userRef?.observe(.value, with: { snapshot in
+            if let value = snapshot.value as? [String: AnyObject] , snapshot.exists() {
                 self.currentUser = User()
-                self.currentUser?.setValuesForKeysWithDictionary(value)
+                self.currentUser?.setValuesForKeys(value)
                 if let currentUser = self.currentUser {
                     self.delegate?.accountManagerUserDidLogin(self, user: currentUser)
                 }
@@ -49,19 +46,12 @@ class AccountManager: AccountManagerProtocol, ConnectivityObservable {
         })
     }
 
-    func login(userData: UserAuthData?, completion: (results: ResultType) -> Void) {
+    func login(_ userData: UserAuthData?, completion: AccountManagerResultCallback) {
         fatalError("login method must be overridden in every child class")
     }
 
     func logout() {
-        PFUser.logOut()
         currentUser = nil
-        FBSDKLoginManager().logOut()
-
-        let store = Twitter.sharedInstance().sessionStore
-        if let userID = store.session()?.userID {
-            store.logOutUserID(userID)
-        }
     }
 
     func initiateUserWithPacks() {
@@ -73,30 +63,15 @@ class AccountManager: AccountManagerProtocol, ConnectivityObservable {
         userQueue.setValue([
             "userId": user.id,
             "type": "initiatePacks"
-        ])
+            ])
     }
 
-    internal func handleParseUser(completion: AccountManagerResultCallback) -> PFUserResultBlock {
-        return { (user, error) in
-            if error == nil {
-                if user == nil {
-                    completion(results: ResultType.Error(e: AccountManagerError.ReturnedEmptyUserObject))
-                } else {
-                    self.openSession(completion)
-                }
-            } else {
-                self.logout()
-                completion(results: ResultType.SystemError(e: error!))
-            }
-        }
-    }
-
-    internal func openSession(completion: (results: ResultType) -> Void) {}
-    internal func fetchUserData(authData: FIRUser, completion: (results: ResultType) -> Void) {}
+    internal func openSession(_ completion: @escaping AccountManagerResultCallback) {}
+    internal func fetchUserData(_ authData: FIRUser, completion: @escaping AccountManagerResultCallback) {}
 }
 
-enum AccountManagerError: ErrorType {
-    case MissingUserData
-    case ReturnedEmptyUserObject
-    case NotConnectedOnline
+enum AccountManagerError: Error {
+    case missingUserData
+    case returnedEmptyUserObject
+    case notConnectedOnline
 }
